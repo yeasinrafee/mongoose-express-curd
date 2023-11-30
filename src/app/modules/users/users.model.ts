@@ -53,3 +53,5 @@ const usersSchema = new Schema<TUsers>({
   },
   orders: [ordersSchema],
 });
+
+const User = model<TUsers>("User", usersSchema);
