@@ -10,16 +10,41 @@ const createUsersIntoDB = async (usersData: TUsers) => {
 };
 
 const getAllUsersFromDB = async () => {
-  const result = await Users.find({}, "username fullName age email address");
+  const result = await Users.find(
+    {},
+    {
+      username: 1,
+      fullName: 1,
+      age: 1,
+      email: 1,
+      address: 1,
+      _id: 0,
+    }
+  );
   return result;
 };
 const getSingleUserFromDB = async (userId: number) => {
   if (await Users.isUserExists(userId)) {
-    const result = await Users.findOne({ userId });
+    const result = await Users.findOne(
+      { userId },
+      { password: 0, orders: 0, _id: 0, __v: 0 }
+    );
     return result;
   }
   throw new Error("User not found");
 };
+
+const updateUserFromDB = async (userId: number, updatedUserData: TUsers) => {
+  if (await Users.isUserExists(userId)) {
+    const result = await Users.findOneAndUpdate({ userId }, updatedUserData, {
+      new: true,
+      select: "userId userName fullName age email isActive hobbies address",
+    });
+    return result;
+  }
+  throw new Error("User not found");
+};
+
 const deleteUserFromDB = async (userId: number) => {
   if (await Users.isUserExists(userId)) {
     const result = await Users.deleteOne({ userId });
@@ -33,4 +58,5 @@ export const UsersServices = {
   getAllUsersFromDB,
   getSingleUserFromDB,
   deleteUserFromDB,
+  updateUserFromDB,
 };

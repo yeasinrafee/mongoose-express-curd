@@ -42,6 +42,7 @@ const getAllUsers = async (req: Request, res: Response) => {
     });
   }
 };
+
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -63,11 +64,40 @@ const getSingleUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { user: usersData } = req.body;
+
+    // Data validation using zod
+    const zodParsedUpdatedData = usersValidationSchema.parse(usersData);
+
+    const result = await UsersServices.updateUserFromDB(
+      Number(userId),
+      zodParsedUpdatedData
+    );
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully!",
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "User not found",
+      error: {
+        code: 404,
+        description: "User not found!",
+      },
+    });
+  }
+};
+
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-
-    const result = await UsersServices.deleteUserFromDB(Number(userId));
+    await UsersServices.deleteUserFromDB(Number(userId));
     res.status(200).json({
       success: true,
       message: "User deleted successfully!",
@@ -89,5 +119,6 @@ export const UsersController = {
   createUsers,
   getAllUsers,
   getSingleUser,
+  updateUser,
   deleteUser,
 };
