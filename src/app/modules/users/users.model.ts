@@ -15,10 +15,12 @@ const usersSchema = new Schema<TUsers>({
   userId: {
     type: Number,
     required: true,
+    unique: true,
   },
   username: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
