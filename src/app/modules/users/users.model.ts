@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { TAddress, TOrders, TUsers } from "./users.interface";
+import { TAddress, TOrders, TUsers, UsersModel } from "./users.interface";
 
 const addressSchema = new Schema<TAddress>({
   street: { type: String, required: true },
@@ -11,7 +11,7 @@ const ordersSchema = new Schema<TOrders>({
   price: { type: Number, required: true },
   quantity: { type: Number, required: true },
 });
-const usersSchema = new Schema<TUsers>({
+const usersSchema = new Schema<TUsers, UsersModel>({
   userId: {
     type: Number,
     required: true,
@@ -56,4 +56,10 @@ const usersSchema = new Schema<TUsers>({
   orders: [ordersSchema],
 });
 
-export const UserModel = model<TUsers>("User", usersSchema);
+// creating a custom static method
+usersSchema.statics.isUserExists = async function (userId: number) {
+  const existingUsers = await Users.findOne({ userId });
+  return existingUsers;
+};
+
+export const Users = model<TUsers, UsersModel>("User", usersSchema);

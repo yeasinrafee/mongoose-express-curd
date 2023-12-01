@@ -16,10 +16,10 @@ const createUsers = async (req: Request, res: Response) => {
       message: "User created successfully!",
       data: result,
     });
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: "User not found",
+      message: err.message || "User not found",
       error: err,
     });
   }
@@ -34,10 +34,10 @@ const getAllUsers = async (req: Request, res: Response) => {
       message: "Users fetched successfully!",
       data: result,
     });
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: "User not found",
+      message: err.message || "User not found",
       error: err,
     });
   }
@@ -45,17 +45,42 @@ const getAllUsers = async (req: Request, res: Response) => {
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
+
     const result = await UsersServices.getSingleUserFromDB(Number(userId));
     res.status(200).json({
       success: true,
       message: "User fetched successfully!",
       data: result,
     });
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: "User not found",
-      error: err,
+      message: err.message || "User not found",
+      error: {
+        code: 404,
+        description: "User not found!",
+      },
+    });
+  }
+};
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    const result = await UsersServices.deleteUserFromDB(Number(userId));
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully!",
+      data: null,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "User not found",
+      error: {
+        code: 404,
+        description: "User not found!",
+      },
     });
   }
 };
@@ -64,4 +89,5 @@ export const UsersController = {
   createUsers,
   getAllUsers,
   getSingleUser,
+  deleteUser,
 };
