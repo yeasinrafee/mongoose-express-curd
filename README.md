@@ -31,9 +31,10 @@ Develop a Node.js Express application with TypeScript as the programming languag
 
 ## Getting Started
 
-1. Clone the repo
+1. Clone the repo or
 2. Run the following commands
    ```
+   git clone git@github.com:yeasinrafee/mongoose-express-curd.git
    npm install
    npm run start:dev
    ```
