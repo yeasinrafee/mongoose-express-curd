@@ -26,7 +26,7 @@ export type TUsers = {
   orders?: TOrders[];
 };
 
-// for creating static
+// for creating static (if user exists or not)
 export interface UsersModel extends Model<TUsers> {
   isUserExists(userId: number): Promise<TUsers | null>;
 }

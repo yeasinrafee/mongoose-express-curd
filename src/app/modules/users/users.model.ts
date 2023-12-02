@@ -8,11 +8,13 @@ const addressSchema = new Schema<TAddress>({
   city: { type: String, required: true },
   country: { type: String, required: true },
 });
+
 const ordersSchema = new Schema<TOrders>({
   productName: { type: String, required: true },
   price: { type: Number, required: true },
   quantity: { type: Number, required: true },
 });
+
 const usersSchema = new Schema<TUsers, UsersModel>({
   userId: {
     type: Number,
@@ -58,6 +60,7 @@ const usersSchema = new Schema<TUsers, UsersModel>({
   orders: [ordersSchema],
 });
 
+// for hashing the password
 usersSchema.pre("save", async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
@@ -68,15 +71,17 @@ usersSchema.pre("save", async function (next) {
   next();
 });
 
+// making password field empty in response
 usersSchema.post("save", function (doc, next) {
   doc.password = "";
   next();
 });
 
-// creating a custom static method
+// creating a custom static method for user exists or not
 usersSchema.statics.isUserExists = async function (userId: number) {
   const existingUsers = await Users.findOne({ userId });
   return existingUsers;
 };
 
+// creating user model
 export const Users = model<TUsers, UsersModel>("User", usersSchema);

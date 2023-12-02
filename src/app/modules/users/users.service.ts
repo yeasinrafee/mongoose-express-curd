@@ -6,7 +6,10 @@ const createUsersIntoDB = async (usersData: TUsers) => {
     throw new Error("User already exists!");
   }
   const result = await Users.create(usersData);
-  return result;
+
+  // It'll not provide the unwanted fields
+  const { password, _id, orders, __v, ...responseUser } = result.toObject();
+  return responseUser;
 };
 
 const getAllUsersFromDB = async () => {
@@ -23,6 +26,7 @@ const getAllUsersFromDB = async () => {
   );
   return result;
 };
+
 const getSingleUserFromDB = async (userId: number) => {
   if (await Users.isUserExists(userId)) {
     const result = await Users.findOne(
@@ -38,7 +42,8 @@ const updateUserFromDB = async (userId: number, updatedUserData: TUsers) => {
   if (await Users.isUserExists(userId)) {
     const result = await Users.findOneAndUpdate({ userId }, updatedUserData, {
       new: true,
-      select: "userId userName fullName age email isActive hobbies address",
+      select:
+        "userId username fullName age email isActive hobbies address -_id",
     });
     return result;
   }
@@ -78,6 +83,7 @@ const getOrderOfUser = async (userId: number) => {
   }
   throw new Error("User not found");
 };
+
 const getTotalPriceOfOrder = async (userId: number) => {
   if (await Users.isUserExists(userId)) {
     const result = await Users.findOne({ userId }, { orders: 1, _id: 0 });

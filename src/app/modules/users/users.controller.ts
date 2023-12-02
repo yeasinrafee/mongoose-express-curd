@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UsersServices } from "./users.service";
 import { usersValidationSchema } from "./users.validation";
 
+// create a new user
 const createUsers = async (req: Request, res: Response) => {
   try {
     const { user: usersData } = req.body;
@@ -25,10 +26,11 @@ const createUsers = async (req: Request, res: Response) => {
   }
 };
 
+// get all users from database
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await UsersServices.getAllUsersFromDB();
-    // It'll send response
+
     res.status(200).json({
       success: true,
       message: "Users fetched successfully!",
@@ -43,6 +45,7 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+// get a single user
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -65,6 +68,7 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+// update a user
 const updateUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -94,6 +98,7 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
+// delete user from database
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -114,6 +119,8 @@ const deleteUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+//// For Order management
 
 // Add products to order
 const addProduct = async (req: Request, res: Response) => {
@@ -138,6 +145,7 @@ const addProduct = async (req: Request, res: Response) => {
   }
 };
 
+// get order for specific user
 const getOrderOfUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -160,6 +168,7 @@ const getOrderOfUser = async (req: Request, res: Response) => {
   }
 };
 
+// calculate the total price of ordered products
 const getTotalPriceOfOrder = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
