@@ -33,8 +33,9 @@ Develop a Node.js Express application with TypeScript as the programming languag
 
 1. Clone the repo
 2. Run the following commands
-
-   > npm install <br>
-   > npm run start:dev
+   ```
+   npm install
+   npm run start:dev
+   ```
 
 HostingLink: https://level2-assignment-2-eosin.vercel.app/
