@@ -8,7 +8,8 @@ const createUsersIntoDB = async (usersData: TUsers) => {
   const result = await Users.create(usersData);
 
   // It'll not provide the unwanted fields
-  const { password, _id, orders, __v, ...responseUser } = result.toObject();
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  const { password, _id, orders, ...responseUser } = result.toObject();
   return responseUser;
 };
 
